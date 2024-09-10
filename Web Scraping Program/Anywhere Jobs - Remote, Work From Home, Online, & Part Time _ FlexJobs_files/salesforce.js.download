@@ -1,0 +1,67 @@
+function addJs(t, callback) {
+  var e = document.createElement("script");
+  e.setAttribute("type", "text/javascript");
+  e.setAttribute("src", t);
+  // Use event listener to detect script load
+  e.addEventListener("load", function () {
+    callback();
+  });
+  document.body.appendChild(e);
+  return e;
+}
+function initESW(gslbBaseURL) {
+  embedded_svc.settings.displayHelpButton = true; //Or false
+  embedded_svc.settings.language = ""; //For example, enter 'en' or 'en-US'
+
+  embedded_svc.settings.defaultMinimizedText = "Need Help? Chat Now!"; //(Defaults to Chat with an Expert)
+  //embedded_svc.settings.disabledMinimizedText = '...'; //(Defaults to Agent Offline)
+
+  //embedded_svc.settings.loadingText = ''; //(Defaults to Loading)
+  //embedded_svc.settings.storageDomain = 'yourdomain.com'; //(Sets the domain for your deployment so that visitors can navigate subdomains during a chat session)
+
+  // Settings for Chat
+  //embedded_svc.settings.directToButtonRouting = function(prechatFormData) {
+  // Dynamically changes the button ID based on what the visitor enters in the pre-chat form.
+  // Returns a valid button ID.
+  //};
+  //embedded_svc.settings.prepopulatedPrechatFields = {}; //Sets the auto-population of pre-chat form fields
+  //embedded_svc.settings.fallbackRouting = []; //An array of button IDs, user IDs, or userId_buttonId
+  //embedded_svc.settings.offlineSupportMinimizedText = '...'; //(Defaults to Contact Us)
+  embedded_svc.settings.enabledFeatures = ["LiveAgent"];
+  embedded_svc.settings.entryFeature = "LiveAgent";
+  embedded_svc.init(
+    "https://boldllc.my.salesforce.com",
+    "https://boldllc.my.salesforce-sites.com/chat",
+    gslbBaseURL,
+    "00D4x000006qNFQ",
+    "flexjobs",
+    {
+      baseLiveAgentContentURL:
+        "https://c.la3-c1-ia4.salesforceliveagent.com/content",
+      deploymentId: "5724x000000M1Pl",
+      buttonId: "5734x000000MPnV",
+      baseLiveAgentURL: "https://d.la3-c1-ia4.salesforceliveagent.com/chat",
+      eswLiveAgentDevName:
+        "EmbeddedServiceLiveAgent_Parent04I4x000000DY5IEAW_18a958acfdc",
+      isOfflineSupportEnabled: false,
+    }
+  );
+}
+var salesforceChat = addJs(
+  "https://service.force.com/embeddedservice/5.0/esw.min.js",
+  function () {
+    if (!window.embedded_svc) {
+      var s = document.createElement("script");
+      s.setAttribute(
+        "src",
+        "https://boldllc.my.salesforce.com/embeddedservice/5.0/esw.min.js"
+      );
+      s.addEventListener("load", function () {
+        initESW(null);
+      });
+      document.body.appendChild(s);
+    } else {
+      initESW("https://service.force.com");
+    }
+  }
+);
